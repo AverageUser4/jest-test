@@ -51,9 +51,25 @@ function getNthListElement(head, n) {
 }
 
 function middleNode(head) {
-  throwOnInvalidNode(head);
+  // throwOnInvalidNode(head);
 
-  return getNthListElement(Math.floor(getListLength(head) / 2) + 1);
+  // return getNthListElement(head, Math.floor(getListLength(head) / 2) + 1);
+  let slow = head;
+  let fast = head.next;
+
+  while(fast) {
+    /*
+      s = 1, f = 2
+      s = 2, f = 4
+      s = 3, f = 6
+      s = 4, f = 8
+
+    */
+    slow = slow.next;
+    fast = fast.next?.next;
+  }
+
+  return slow;
 };
 
 module.exports = {
