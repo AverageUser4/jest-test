@@ -229,11 +229,6 @@ describe('MyStack', () => {
       expect(stack.top()).toBe(1);
     });
     
-    it('top() returns correct item after pop()', () => {
-      stack.pop();
-      expect(stack.top()).toBe(1);
-    });
-    
     it('top() reutrns null after calling pop() twice', () => {
       stack.pop();
       stack.pop();

@@ -51,39 +51,34 @@ class MyStack {
   topItem = null;
 
   constructor() {
-    this.queue_1 = new MyQueue();
-    this.queue_2 = new MyQueue();
-    this.currentQueue = this.queue_1;
-    this.helperQueue = this.queue_2;
+    this.queue = new MyQueue();
   }
   
   push(x) {
-    this.currentQueue.pushToBack(x);
+    this.queue.pushToBack(x);
     this.topItem = x;
+
     return null;
   }
 
   pop() {
-    console.log(this.queue_1, this.queue_2)
-
-    if(this.currentQueue.empty())
+    if(this.queue.empty())
       return null;
 
-    if(this.currentQueue.size() === 1)
-      this.topItem = null;
-      
-    while(this.currentQueue.size() > 1) {
-      const p = this.currentQueue.pop();
-      this.topItem = p;
-      this.helperQueue.pushToBack(p);
+    const size = this.queue.size();
+
+    let secondToLast = null;
+
+    for(let i = 0; i < size - 1; i++) {
+      const p = this.queue.pop();
+      if(i === size - 2)
+        secondToLast = p;
+      this.queue.pushToBack(p);
     }
 
-    const poppedItem = this.currentQueue.pop();
-    
-    const buf = this.currentQueue;
-    this.currentQueue = this.helperQueue;
-    this.helperQueue = buf;
-    
+      const poppedItem = this.queue.pop();
+      this.topItem = secondToLast;
+
     return poppedItem;
   }
 
