@@ -1,14 +1,12 @@
-const axios = require('axios');
-
-let config = {
-  headers: {
-    'accept-encoding': null
-  }
+function getNumber(n) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(n), 100);
+  });
 }
 
-async function fetchData(id) {
-  const response = await axios.get(`https://jsonplaceholder.typicode.com/todos/${id}`, config);
-  return response.data;
+async function fetchData(n) {
+  const response = await getNumber(n);
+  return response;
 }
 
 module.exports = fetchData;

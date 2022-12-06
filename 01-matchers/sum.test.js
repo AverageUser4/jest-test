@@ -75,4 +75,26 @@ describe('exceptions', () => {
   
 });
 
-// 28:30
+describe.only('checking stuff out', () => {
+
+  it('toEqual expects object with exactly same properties', () => {
+    expect({ a: 'a' }).toEqual({ a: 'a' });
+    expect({ a: 'a' }).not.toEqual({ a: 'a', b: 'b' });
+    expect({ a: 'a', b: 'b' }).not.toEqual({ a: 'a' });
+
+    // ignores undefined values
+    expect({ a: 'a' }).toEqual({ a: 'a', b: undefined });
+    expect({ a: 'a', b: undefined }).toEqual({ a: 'a' });
+  });
+
+  it('toStrictEqual takes undefined properties into account', () => {
+    expect({ a: 'a' }).not.toStrictEqual({ a: 'a', b: undefined });
+    expect({ a: 'a', b: undefined }).not.toStrictEqual({ a: 'a' });
+  });
+
+  it('objectContaining expects object that has at least required properties, but may have others', () => {
+    expect({ a: 'a', b: 'b' }).toEqual(expect.objectContaining({ a: 'a' }));
+    expect({ a: 'a' }).not.toEqual(expect.objectContaining({ a: 'a', b: 'b' }));
+  });
+
+});
