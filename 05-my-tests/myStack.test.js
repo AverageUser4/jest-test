@@ -1,119 +1,288 @@
-const { myQueue, myStack, MyQueue } = require('./myStack');
+const { MyQueue, myStack, MyStack } = require('./myStack');
 
+let stack;
 let queue;
 
 describe('myQueue', () => {
-
-  beforeEach(() => {
-    queue = new MyQueue();
-  });
   
-  it('creates expected object', () => {
-    expect(queue).toEqual(
-      expect.objectContaining({ _size: 0, _head: {} }));
-  });
-
-  it('adds expected value to the queue', () => {
-    queue.pushToBack(5);
-    expect(queue).toEqual(expect.objectContaining({
-      _head: { value: 5 }
-    }));
-  });
-
-  if('adds mutliple values to the queue', () => {
-    queue.pushToBack(1);
-    queue.pushToBack(2);
-    expect(queue).toEqual(expect.objectContaining({
-      _head: { value: 1, next: { value: 2 }}
-    }));
-  });
-
-  it('increases the size when new item is added', () => {
-    queue.pushToBack(5);
-    expect(queue.size()).toBe(1);
-  });
+  describe('empty queue', () => {
     
-  it('pops the only item', () => {
-    queue.pushToBack(1);
-    queue.pop();
-    expect(queue).toEqual(expect.objectContaining({
-      _head: {}
-    }));
+    beforeEach(() => {
+      queue = new MyQueue();
+    });
+
+    it('empty() returns true', () => {
+      expect(queue.empty()).toBe(true);
+    });
+  
+    it('peek() returns null', () => {
+      expect(queue.peek()).toBeNull();
+    });
+    
+    it('pop() returns null', () => {
+      expect(queue.pop()).toBeNull();
+    });
+
+    it('size() returns 0', () => {
+      expect(queue.size()).toBe(0);
+    })
+
+    it('pushToBack() returns null', () => {
+      expect(queue.pushToBack()).toBe(null);
+    });
+    
   });
 
-  it('pops one of many items', () => {
-    queue.pushToBack(1);
-    queue.pushToBack(2);
-    queue.pushToBack(3);
-    queue.pop();
-    expect(queue).toEqual(expect.objectContaining({
-      _head: { value: 2, next: { value: 3 } }
-    }));
+  describe('queue with 1 item', () => {
+
+    beforeEach(() => {
+      queue = new MyQueue();
+      queue.pushToBack(5);
+    });
+
+    it('empty() returns false', () => {
+      expect(queue.empty()).toBe(false);
+    });
+    
+    it('empty() returns true after pop', () => {
+      queue.pop();
+      expect(queue.empty()).toBe(true);
+    });
+    
+    it('size() returns 1', () => {
+      expect(queue.size()).toBe(1);
+    });
+
+    it('size() returns 0 after pop()', () => {
+      queue.pop();
+      expect(queue.size()).toBe(0);
+    });
+
+    it('peek() returns value of the head', () => {
+      expect(queue.peek()).toBe(5);
+    });
+
+    it('peek() returns null after pop()', () => {
+      queue.pop();
+      expect(queue.peek()).toBeNull();
+    });
+
+    it('pop() returns value of the head', () => {
+      expect(queue.pop()).toBe(5);
+    });
+
+    it('pop() returns null after pop()', () => {
+      queue.pop();
+      expect(queue.pop()).toBeNull();
+    });
+    
   });
 
-  it('decreases size when popping item', () => {
-    queue.pushToBack(1);
-    queue.pop();
-    expect(queue.size()).toBe(0);
-  });
+  describe('queue with 2 items', () => {
 
-  it('returns popped item', () => {
-    queue.pushToBack(5);
-    expect(queue.pop()).toBe(5);
-    expect(queue.size()).toBe(0);
+    beforeEach(() => {
+      queue = new MyQueue();
+      queue.pushToBack(5);
+      queue.pushToBack(6);
+    });
+    
+    it('empty() returns false after pop', () => {
+      queue.pop();
+      expect(queue.empty()).toBe(false);
+    });
+    
+    it('size() returns 2', () => {
+      expect(queue.size()).toBe(2);
+    });
+
+    it('size() returns 1 after pop()', () => {
+      queue.pop();
+      expect(queue.size()).toBe(1);
+    });
+
+    it('peek() returns value of the head', () => {
+      expect(queue.peek()).toBe(5);
+    });
+
+    it('peek() returns next value after pop()', () => {
+      queue.pop();
+      expect(queue.peek()).toBe(6);
+    });
+
+    it('pop() returns value of the head', () => {
+      expect(queue.pop()).toBe(5);
+    });
+
+    it('pop() returns next value after pop()', () => {
+      queue.pop();
+      expect(queue.pop()).toBe(6);
+    });
+
   });
   
-  it('returns undefined when popping empty queue', () => {
-    expect((queue).pop()).toBeUndefined();
-  });
+  describe('behavior', () => {
 
-  it('does not make size less than 0 when popping empty queue', () => {
-    queue.pop();
-    expect(queue.size()).toBe(0);
-  });
+    beforeEach(() => {
+      queue = new MyQueue();
+      queue.pushToBack(1);
+      queue.pushToBack(2);
+      queue.pushToBack(3);
+      queue.pop();
+      queue.pop();
+      queue.pushToBack(4);
+      queue.pushToBack(5);
+      queue.pop();
+    });
 
-  it('returns _size when size() is called', () => {
-    expect(queue._size).toBe(queue.size());
-  });
+    it('correct empty() after multiple content changes', () => {
+      expect(queue.empty()).toBe(false);
+    });
+    
+    it('correct size() after multiple content changes', () => {
+      expect(queue.size()).toBe(2);
+    });
+    
+    it('correct peek() after multiple content changes', () => {
+      expect(queue.peek()).toBe(4);
+    });
 
-  it('empty returns true for empty queue', () => {
-    expect(queue.empty()).toBe(true);
-  });
-
-  it('empty returns false for populated queue', () => {
-    queue.pushToBack(1);
-    expect(queue.empty()).toBe(false);
-  });
-
-  it('peek returns the head for empty queue', () => {
-    expect(queue.peek()).toBe(queue._head);
+    it('correct pop() return value after multiple content changes', () => {
+      expect(queue.pop()).toBe(4);
+    });
+    
   });
   
-  it('peek returns the head for populated queue', () => {
-    queue.pushToBack(1);
-    expect(queue.peek()).toBe(queue._head);
+});
+
+
+describe('MyStack', () => {
+
+  describe('empty stack', () => {
+
+    beforeEach(() => {
+      stack = new MyStack();
+    });
+
+    it('empty() returns true', () => {
+      expect(stack.empty()).toBeTruthy();
+    });
+  
+    it('top() returns null', () => {
+      expect(stack.top()).toBeNull();
+    });
+    
+    it('pop() returns null', () => {
+      expect(stack.pop()).toBeNull();
+    });
+
+    it('push() returns null', () => {
+      expect(stack.push()).toBeNull();
+    });
+    
+  });
+  
+  describe('stack with 1 item', () => {
+
+    beforeEach(() => {
+      stack = new MyStack();
+      stack.push(1);
+    });
+    
+    it('top() returns correct item', () => {
+      expect(stack.top()).toBe(1);
+    });
+    
+    it('top() does not remove item', () => {
+      stack.top();
+      expect(stack.empty()).toBeFalsy();
+    });
+    
+    it('pop() returns correct item', () => {
+      expect(stack.pop()).toBe(1);
+    });
+
+    it('pop() removes item', () => {
+      stack.pop();
+      expect(stack.empty()).toBeTruthy();
+    });
+
+    it('empty() returns false', () => {
+      expect(stack.empty()).toBeFalsy();
+    });
+    
   });
 
-  it('multiple calls to different methods dont disrupt queue working', () => {
-    queue.pop();
-    queue.peek();
-    queue.pushToBack(1);
-    queue.pop();
-    queue.empty();
-    queue.pop();
-    queue.size();
-    queue.pushToBack(2);
-    queue.size();
-    queue.peek();
-    queue.pushToBack(3);
-    queue.pop();
-    queue.pushToBack(4);
-    expect(queue).toEqual(expect.objectContaining({
-      _size: 2,
-      _head: { value: 3, next: { value: 4 } }
-    }));
+  describe('stack with 2 items', () => {
 
-    console.log('PENIS PENIS PENIS')
+    beforeEach(() => {
+      stack = new MyStack();
+      stack.push(1);
+      stack.push(2);
+    });
+
+    it('top() returns correct item', () => {
+      expect(stack.top()).toBe(2);
+    });
+    
+    it('top() returns correct item after pop()', () => {
+      stack.pop();
+      expect(stack.top()).toBe(1);
+    });
+    
+    it('top() returns correct item after pop()', () => {
+      stack.pop();
+      expect(stack.top()).toBe(1);
+    });
+    
+    it('top() reutrns null after calling pop() twice', () => {
+      stack.pop();
+      stack.pop();
+      expect(stack.top()).toBeNull();
+    }); 
+    
+    it('pop() returns correct item', () => {
+      expect(stack.pop()).toBe(2);
+    });
+
+    it('pop() returns correct item after pop()', () => {
+      stack.pop();
+      expect(stack.pop()).toBe(1);
+    });
+
+    it('empty() reutrns true after calling pop() twice', () => {
+      stack.pop();
+      stack.pop();
+      expect(stack.empty()).toBeTruthy();
+    }); 
+    
+  });
+
+  describe('behavior', () => {
+
+    beforeEach(() => {
+      stack = new MyStack();
+      stack.push(1);
+      stack.push(2);
+      stack.push(3);
+      stack.pop();
+      stack.pop();
+      stack.push(4);
+      stack.push(5);
+      stack.pop();
+    });
+
+    it('correct empty() after multiple content changes', () => {
+      expect(stack.empty()).toBe(false);
+    });
+    
+    it('correct top() after multiple content changes', () => {
+      expect(stack.top()).toBe(4);
+    });
+
+    it('correct pop() return value after multiple content changes', () => {
+      expect(stack.pop()).toBe(4);
+    });
+    
   });
   
 });
